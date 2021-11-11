@@ -7,114 +7,63 @@ if [[ -f "/mnt/c/WINDOWS/system32/wsl.exe" ]]; then
   fi
 fi
 
-if [[ ! -d "$HOME/.zinit" ]]; then
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
-  chmod 700 "$HOME/.zinit"
+# Clone zcomet if necessary
+if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
+  command git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
 fi
 
-### Added by zinit's installer
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-### End of zinit installer's chunk
+source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 
-# A binary Zsh module which transparently and automatically compiles sourced scripts
-module_path+=( "${HOME}/.zinit/bin/zmodules/Src" )
-zmodload zdharma/zplugin &>/dev/null
+if [[ -f "${HOME}/.local.before.zshrc" ]]; then
+  source "${HOME}/.local.before.zshrc"
+fi
 
-zinit ice wait lucid blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
+zcomet load zsh-users/zsh-completions
 
-# zdharma/history-search-multi-word
-zinit ice wait"1" lucid
-zinit load zdharma/history-search-multi-word
+zcomet load zdharma-continuum/history-search-multi-word
 
-zinit ice pick"async.zsh" src"pure.zsh"
-zinit light sindresorhus/pure
+zcomet load sindresorhus/pure async.zsh pure.zsh
 
-zinit ice wait lucid blockf atinit'chmod 700 .'
-zinit load agkozak/zsh-z
+zcomet load agkozak/zsh-z
 
-# BurntSushi/ripgrep
-zinit ice as"command" from"gh-r" mv"ripgrep* -> rg" pick"rg/rg" atclone'curl -Lo _rg https://raw.githubusercontent.com/BurntSushi/ripgrep/master/complete/_rg' atpull'%atclone'
-zinit light BurntSushi/ripgrep
+zcomet load abl/zsh-direnv
 
-# sharkdp/fd
-zinit ice as"command" from"gh-r" mv"fd* -> fd" pick"fd/fd" atclone'curl -Lo _fd https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd' atpull'%atclone'
-zinit light sharkdp/fd
+zcomet load junegunn/fzf shell completion.zsh key-bindings.zsh
+(( ${+commands[fzf]} )) || ~[fzf]/install --bin
 
-# sharkdp/bat
-zinit ice as"command" from"gh-r" mv"bat* -> bat" pick"bat/bat" atclone'mv -f **/*.zsh _bat' atpull'%atclone'
-zinit light sharkdp/bat
+zcomet load wfxr/forgit
 
-# dandavision/delta
-zinit ice as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta" atclone'curl -Lo _delta https://raw.githubusercontent.com/dandavison/delta/master/etc/completion/completion.zsh' atpull'%atclone'
-zinit light dandavison/delta
-# Configure as default git diff renderer
-git config --global core.pager "delta --dark"
+zcomet load hlissner/zsh-autopair
 
-# ogham/exa, replacement for ls
-zinit ice as"command" from"gh-r" mv"exa* -> exa" pick"exa/exa" atclone'curl -Lo _exa https://raw.githubusercontent.com/ogham/exa/master/completions/completions.zsh' atpull'%atclone'
-zinit light ogham/exa
+zcomet load zdharma-continuum/fast-syntax-highlighting
+zcomet load zsh-users/zsh-autosuggestions
 
-# direnv
-zinit ice from"gh-r" as"program" mv"direnv* -> direnv"
-zinit light direnv/direnv
-
-# gh cli 
-zinit ice as"command" from"gh-r" pick"./**/gh" atclone'./**/gh completion --shell zsh > _gh' atpull'%atclone'
-zinit light cli/cli
-
-# micro 
-zinit ice as"command" from"gh-r" pick"./**/micro"
-zinit light zyedidia/micro
-
-# pyenv
-zinit ice atclone"./libexec/pyenv init - > zpyenv.zsh" \
-    atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
-    as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
-zinit light pyenv/pyenv
-
-# fzf
-zinit ice from"gh-r" as"program" atclone'curl -Lo _fzf https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh' atpull'%atclone'
-zinit light junegunn/fzf
-
-# forgit
-zinit ice wait lucid
-zinit load 'wfxr/forgit'
-
-# zsh-autopair
-zinit ice wait lucid
-zinit load hlissner/zsh-autopair
-
-# Autosuggestions & fast-syntax-highlighting
-zinit ice wait"1" lucid atinit"zpcompinit; zpcdreplay" atload"FAST_HIGHLIGHT[chroma-git]=\"chroma/-ogit.ch\""
-zinit light zdharma/fast-syntax-highlighting
-# zsh-autosuggestions
-zinit ice wait"1" lucid atload"!_zsh_autosuggest_start"
-zinit load zsh-users/zsh-autosuggestions
-
-PATH=${PATH}:"${HOME}/.bin":"${HOME}/.local/bin"
+path=($path "${HOME}/.bin" "${HOME}/.local/bin")
 
 # Nix
 if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
   source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 fi
 
-alias ls=exa
-alias cat=bat
-alias less=bat
-alias more=bat
+if which exa > /dev/null 2>&1; then
+  alias ls=exa
+fi
+
+if which bat > /dev/null 2>&1; then
+  alias cat=bat
+  alias less=bat
+  alias more=bat
+fi
 
 setopt inc_append_history
 setopt share_history
 
-export EDITOR="micro"
-export VISUAL="micro"
+export EDITOR="nano"
+export VISUAL="nano"
 
 if [[ -d "${HOME}/.deno" ]]; then
     export DENO_INSTALL="${HOME}/.deno"
-    export PATH="$PATH:$DENO_INSTALL/bin"
+    path=($path "${DENO_INSTALL}/bin")
 fi
 
 if [[ -d "${HOME}/.go/env" ]]; then
@@ -123,5 +72,24 @@ fi
 
 if [[ -d "${HOME}/.fly" ]]; then
     export FLYCTL_INSTALL="${HOME}/.fly"
-    export PATH="$PATH:$FLYCTL_INSTALL/bin"
+    path=($path "${FLYCTL_INSTALL}/bin")
 fi
+
+if [[ ! -d "${HOME}/.nano" ]]; then
+  echo "Setting up .nanorc..."
+  pushd "${HOME}" > /dev/null
+  curl -sL https://github.com/scopatz/nanorc/archive/refs/heads/master.tar.gz | tar xz
+  mv nanorc-master .nano
+  find ~/.nano -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc 2>/dev/null
+  popd > /dev/null
+fi
+
+path=(/usr/local/bin $path)
+
+if [[ -f "${HOME}/.local.after.zshrc" ]]; then
+  source "${HOME}/.local.after.zshrc"
+fi
+
+typeset -U path
+
+zcomet compinit
