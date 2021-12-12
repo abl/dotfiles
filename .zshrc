@@ -84,12 +84,23 @@ if [[ ! -d "${HOME}/.nano" ]]; then
   popd > /dev/null
 fi
 
+if [[ -f "${HOME}/.asdf/asdf.sh" ]]; then
+  . "${HOME}/.asdf/asdf.sh"
+  fpath=("${HOME}/.asdf/completions" $fpath)
+fi
+
+if [[ -d "${HOME}/sheldon" ]]; then
+  eval "$(sheldon source)"
+fi
+
 path=(/usr/local/bin $path)
 
 if [[ -f "${HOME}/.local.after.zshrc" ]]; then
   source "${HOME}/.local.after.zshrc"
 fi
 
-typeset -U path
+fpath=("${HOME}/.zsh-completions" $fpath)
+
+typeset -U fpath
 
 zcomet compinit
