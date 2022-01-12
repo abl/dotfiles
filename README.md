@@ -2,6 +2,13 @@
 
 Tested on a random variety of operating systems and architectures. Requires a ~recent version of `git` to be installed.
 
+The `.zshrc` file is thoroughly commented withe the intent of each section/line.
+
+## Warnings
+
+ * Requires a recent (> 5.0.3) version of zsh.
+ * Requires the latest version of `nano`; `nano -I` can be used to ignore the `.nanorc` that's created by this script as old `nano` versions may crash on startup.
+
 ## Installing
 
 Fork this repository! Expect breaking changes at some point. :)
@@ -37,41 +44,41 @@ This repository will, over time, contain my lunarvim configuration and asdf+shel
 
 All dependencies are auto-installed; this list explains what each dependency does.
 
-### agkozak/zcomet
+### https://github.com/agkozak/zcomet
 
-https://github.com/agkozak/zcomet is a lightweight ZSH plugin manager that makes it relatively easy to update and precompile ZSH plugins; this helps keep new shell startup time low and keep the `.zshrc` readable.
+zcomet is a lightweight ZSH plugin manager that makes it relatively easy to update and precompile ZSH plugins; this helps keep new shell startup time low and keep the `.zshrc` readable.
 
-### zsh-users/zsh-completions
+### https://github.com/zsh-users/zsh-completions
 
 Extra completion definitions for zsh; makes tab completion massively more powerful.
 
-### sindresorhus/pure
+### https://github.com/sindresorhus/pure
 
 The objectively best ZSH prompt.
 
-### agkozak/zsh-z
+### https://github.com/agkozak/zsh-z
 
 Sets up the `z` utility; run `z` with some words and it will `cd` to the path that you most frequently/recently used containing those words.
 
 **This is the single most useful improvement I've made to my shell productivity; if you try anything here, try this!**
 
-### abl/zsh-direnv
+### https://github.com/abl/zsh-direnv
 
 Trivial fork of https://github.com/ptavares/zsh-direnv with support for `darwin-` platforms.
 
 Installs and configures https://direnv.net.
 
-### junegunn/fzf
+### https://github.com/junegunn/fzf
 
 Installs and configures `fzf`, "a general-purpose command-line fuzzy finder".
 
 Rebinds `CTRL-T`, `CTRL-R`, and `ALT-C` to more powerful variants.
 
-### wfxr/forgit
+### https://github.com/wfxr/forgit
 
 Builds on `fzf` and provides powerful, interactive, commands; refer to https://github.com/wfxr/forgit#-features.
 
-### hlissner/zsh-autopair
+### https://github.com/hlissner/zsh-autopair
 
 In the project's own words:
 
@@ -79,7 +86,7 @@ In the project's own words:
 
 Certain terminals (especialy VS Code Live Share) have trouble rendering this faithfully.
 
-### zdharma-continuum/fast-syntax-highlighting
+### https://github.com/zdharma-continuum/fast-syntax-highlighting
 
 Fast and powerful syntax highlighting for commands.
 
@@ -87,6 +94,6 @@ Slow connections / slow computers (e.g. a raspberry pi on a cellular connection)
 
 Certain terminals (especialy VS Code Live Share) have trouble rendering this faithfully.
 
-### zsh-users/zsh-autosuggestions
+### https://github.com/zsh-users/zsh-autosuggestions
 
 Suggests commands as you type based on history; commands show up in pale text. Press `END` or `right-arrow` to accept the suggestion.
