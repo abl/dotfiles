@@ -34,8 +34,14 @@ zcomet load junegunn/fzf shell completion.zsh key-bindings.zsh
 
 zcomet load wfxr/forgit
 
+# Add /usr/local/bin to the beginning of $PATH
 # add ~/.bin and ~/.local/bin to PATH
-path=($path "${HOME}/.bin" "${HOME}/.local/bin")
+path=(/usr/local/bin $path "${HOME}/.bin" "${HOME}/.local/bin")
+
+# If homebrew is installed to the new default directory, add it to PATH
+if [[ -d "/opt/homebrew/bin" ]]; then
+  path=("/opt/homebrew/bin" $path)
+fi
 
 # Source the default Nix profile if it exists
 if [[ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
@@ -90,25 +96,6 @@ if [[ ! -d "${HOME}/.nano" ]]; then
   mv nanorc-master .nano
   find ~/.nano -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc 2>/dev/null
   popd > /dev/null
-fi
-
-# If asdf is installed, configure it and add it to completions
-if [[ -f "${HOME}/.asdf/asdf.sh" ]]; then
-  . "${HOME}/.asdf/asdf.sh"
-  fpath=("${HOME}/.asdf/completions" $fpath)
-fi
-
-# If sheldon is installed, load it
-if [[ -d "${HOME}/sheldon" ]]; then
-  eval "$(sheldon source)"
-fi
-
-# Add /usr/local/bin to the beginning of $PATH
-path=(/usr/local/bin $path)
-
-# If homebrew is installed to the new default directory, add it to PATH
-if [[ -d "/opt/homebrew/bin" ]]; then
-  path=("/opt/homebrew/bin" $path)
 fi
 
 if [[ -f "${HOME}/.local.after.zshrc" ]]; then
