@@ -89,14 +89,15 @@ fi
 
 # Add scopatz's excellent syntax highlighters; this requires a recent nano
 # remember `nano -I` to ignore `.nanorc` if needed!
-if [[ ! -d "${HOME}/.nano" ]]; then
-  echo "[INFO] Setting up .nanorc..."
-  pushd "${HOME}" > /dev/null
-  curl -sL https://github.com/scopatz/nanorc/archive/refs/heads/master.tar.gz | tar xz
-  mv nanorc-master .nano
-  find ~/.nano -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc 2>/dev/null
-  popd > /dev/null
-fi
+# NOTE: commenting this out for now to avoid breaking students
+#if [[ ! -d "${HOME}/.nano" ]]; then
+#  echo "[INFO] Setting up .nanorc..."
+#  pushd "${HOME}" > /dev/null
+#  curl -sL https://github.com/scopatz/nanorc/archive/refs/heads/master.tar.gz | tar xz
+#  mv nanorc-master .nano
+#  find ~/.nano -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc 2>/dev/null
+#  popd > /dev/null
+# fi
 
 if [[ -f "${HOME}/.local.after.zshrc" ]]; then
   source "${HOME}/.local.after.zshrc"
