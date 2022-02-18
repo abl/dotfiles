@@ -15,6 +15,7 @@ Fork this repository! Expect breaking changes at some point. :)
 
 ```
 GITHUB_USERNAME=abl # replace with your github username
+# Make sure you've forked first!
 git clone https://github.com/${GITHUB_USERNAME}/dotfiles ~/.dotfiles
 
 # You may want to copy the contents into ~/.local.after.zshrc
